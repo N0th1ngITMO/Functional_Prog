@@ -1,0 +1,54 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      
+jobs:
+  build:
+    strategy:
+      matrix:
+        directory: ["FunProg_1"]
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4.0.1
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Restore dependencies
+        run: dotnet restore ${{ matrix.directory }}/${{ matrix.directory }}.fsproj
+
+      - name: Build project
+        run: dotnet build ./${{ matrix.directory }}
+
+      - name: Set DOTNET_ROLL_FORWARD
+        run: echo "DOTNET_ROLL_FORWARD=latestMajor" >> $GITHUB_ENV
+      - name: Lint
+        run: |
+          dotnet tool install -g dotnet-fsharplint
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          dotnet fsharplint lint ./${{ matrix.directory }}
+
+      - name: Formatter
+        run: |
+          dotnet tool install -g fantomas-tool
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+          fantomas ./${{ matrix.directory }}/*.fs 
+    
+      
+        
+      - name: Run project
+        run: dotnet run --project ./${{ matrix.directory }}
+
+
+      - name: Tests
+        run: |
+            dotnet restore FunProg_tests/FunProg_tests.fsproj
+            dotnet build ./FunProg_tests
+            dotnet test ./FunProg_tests
