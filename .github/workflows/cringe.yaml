@@ -23,28 +23,34 @@ jobs:
           
       - name: Restore dependencies
         run: dotnet restore ${{ matrix.directory }}/${{ matrix.directory }}.fsproj
+        working-directory: ./${{ matrix.directory }}
 
       - name: Build project
         run: dotnet build ./${{ matrix.directory }}
+        working-directory: ./${{ matrix.directory }}
 
       - name: Set DOTNET_ROLL_FORWARD
         run: echo "DOTNET_ROLL_FORWARD=latestMajor" >> $GITHUB_ENV
+        working-directory: ./${{ matrix.directory }}
       - name: Lint
         run: |
           dotnet tool install -g dotnet-fsharplint
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
           dotnet fsharplint lint ./${{ matrix.directory }}
+        working-directory: ./${{ matrix.directory }}
 
       - name: Formatter
         run: |
           dotnet tool install -g fantomas-tool
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
           fantomas ./${{ matrix.directory }}/*.fs 
+        working-directory: ./${{ matrix.directory }}
     
       
         
       - name: Run project
         run: dotnet run --project ./${{ matrix.directory }}
+        working-directory: ./${{ matrix.directory }}
 
 
       - name: Tests
@@ -52,3 +58,4 @@ jobs:
             dotnet restore FunProg_tests/FunProg_tests.fsproj
             dotnet build ./FunProg_tests
             dotnet test ./FunProg_tests
+        working-directory: ./FunProg_tests
