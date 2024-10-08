@@ -20,6 +20,25 @@ let solution15 x y =
                   result
     latticePaths x y
 ```
+2. Решение на языке C++
+```
+#include <stdio.h>
+
+int main(void){
+  unsigned long long a[22] = {0};
+  a[1] = 1;
+
+  for (int i = 1; row < 22; row++){
+    for(int j = 1; column < 22; column++){
+      a[column] += a[column - 1];
+    }
+  }
+
+  unsigned long long answ = a[21];
+  printf("%llu", answ);
+  return 0;
+}
+```
 ## Решение задачи 16
 1. Рекурсия + Array.reduce
 ```
@@ -43,7 +62,7 @@ let solution16_1 =
     let sum (acc : int) item = acc + item
     Array.reduce sum arr
 ```
-2. Рекурсия + pattern matching
+2. Рекурсия + pattern matching  
 Делаем рекурсивное умножение с использованием типа BigInt
 ```
 let solution16_2 b exp =
@@ -99,4 +118,36 @@ let solution16_4 exp =
         |> Seq.sum
     
     sumOfDigitsOfPowerOfTwo exp
+```
+5. Решение на языке C++
+```
+#include <stdio.h>
+
+#define LEN_ARR 350
+
+int main(void){
+  char arr[LEN_ARR] = {2};
+  int count = 1;
+  int num;
+  int dex_num;
+  int sum_num = 0;
+
+  while(count < 1000){
+    dex_num = 0;
+    for(int i = 0; i < LEN_ARR; i++){
+      num = arr[i];
+      num *= 2;
+      num += dex_num;
+      arr[i] = num % 10;
+      dex_num = num / 10;
+    }
+    count++;
+  }
+
+  for(int i = 0; i < LEN_ARR; i++){
+    sum_num += arr[i];
+  }
+  printf("%d", sum_num);
+  return 0;
+}
 ```
