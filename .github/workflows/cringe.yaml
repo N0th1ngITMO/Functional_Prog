@@ -55,7 +55,7 @@ jobs:
 
       - name: Tests
         run: |
-            dotnet restore FunProg_tests/FunProg_tests/FunProg_tests.fsproj
+            dotnet restore FunProg_1/FunProg_tests/FunProg_tests/FunProg_tests.fsproj
             dotnet build ./FunProg_tests/FunProg_tests
             dotnet test ./FunProg_tests/FunProg_tests
-        working-directory: ./${{ matrix.directory }}
+        
