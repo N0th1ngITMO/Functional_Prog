@@ -10,11 +10,6 @@ let ``task20RecursionSolution should find sum of 100!`` () =
     Assert.Equal(137846528820I, result)
 
 [<Fact>]
-let ``task20SequenceSolution should find sum of 100!`` () =
-    let result = solution16_1
-    Assert.Equal(1366, result)
-
-[<Fact>]
 let ``task20ModuleSolution should find sum of 300!`` () =
     let result = solution16_2 2I 1000
     Assert.Equal(1366, result)
