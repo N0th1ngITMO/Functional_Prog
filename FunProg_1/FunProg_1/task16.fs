@@ -3,27 +3,6 @@ module task16
 open System
 open System.Numerics
 
-//recurtion loop + Array.reduce
-let solution16_1 =
-    let arr = Array.zeroCreate 350
-    arr.[0] <- 2
-    let mutable num = 0
-    let mutable dexNum = 0
-    let rec forLoop (arr : int array) times =
-        if times = 1 then ()
-        else 
-            dexNum <- 0
-            for i in 0..349 do
-                num <- arr.[i] * 2 + dexNum
-                arr.[i] <- num % 10
-                dexNum <- num / 10
-            forLoop arr (times - 1)
-    
-    forLoop arr 1000
-
-    let sum (acc : int) item = acc + item
-    Array.reduce sum arr
-
 //recurtion + pattern matching
 let solution16_2 b exp =
     let rec recursivePower b exp =
@@ -70,9 +49,13 @@ let solution16_3 b exp =
 //sequence
 let solution16_4 exp =
     let sumOfDigitsOfPowerOfTwo exp =
-        let bigNumber = bigint 2 ** exp
-        bigNumber.ToString()
-        |> Seq.map (fun c -> int (c - '0'))
+        let bigNumber = (pown (bigint 2) exp).ToString()
+        
+        Seq.initInfinite id
+        |> Seq.map (fun i -> bigNumber.[i])
+        |> Seq.map (fun c -> int c - int '0')
+        |> Seq.take bigNumber.Length
         |> Seq.sum
-    
+
     sumOfDigitsOfPowerOfTwo exp
+    
