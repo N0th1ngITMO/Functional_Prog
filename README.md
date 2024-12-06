@@ -7,18 +7,19 @@
 1. Рекурсия + pattern matching
 Рекурсивно проходимся по парам значений, которые характеризуют позицию на сетке, и складываем полученные значения
 ```
-let solution15 x y = 
-    let mutable memo = Dictionary<(int * int), int64>()
-    let rec latticePaths x y : int64 =
+let solution15 x y =
+    let rec latticePaths x y memo =
         match x, y with
-        | 0, _
-        | _, 0 -> 1
-        | _, _ when memo.ContainsKey((x, y))
-            -> memo.[(x, y)]
-        | x, y -> let result = latticePaths (x - 1) y + latticePaths x (y - 1)
-                  memo.Add((x, y), result)
-                  result
-    latticePaths x y
+        | 0, _ 
+        | _, 0 -> 1L, memo
+        | _ when Map.containsKey (x, y) memo ->
+            memo.[(x, y)], memo
+        | _ ->
+            let leftPaths, memo' = latticePaths (x - 1) y memo
+            let downPaths, memo'' = latticePaths x (y - 1) memo'
+            let result = leftPaths + downPaths
+            result, Map.add (x, y) result memo''
+    fst (latticePaths x y Map.empty)
 ```
 2. Решение на языке C++
 ```
@@ -40,29 +41,7 @@ int main(void){
 }
 ```
 ## Решение задачи 16
-1. Рекурсия + Array.reduce
-```
-let solution16_1 =
-    let arr = Array.zeroCreate 350
-    arr.[0] <- 2
-    let mutable num = 0
-    let mutable dexNum = 0
-    let rec forLoop (arr : int array) times =
-        if times = 1 then ()
-        else 
-            dexNum <- 0
-            for i in 0..349 do
-                num <- arr.[i] * 2 + dexNum
-                arr.[i] <- num % 10
-                dexNum <- num / 10
-            forLoop arr (times - 1)
-    
-    forLoop arr 1000
-
-    let sum (acc : int) item = acc + item
-    Array.reduce sum arr
-```
-2. Рекурсия + pattern matching  
+1. Рекурсия + pattern matching  
 Делаем рекурсивное умножение с использованием типа BigInt
 ```
 let solution16_2 b exp =
@@ -85,7 +64,7 @@ let solution16_2 b exp =
     let result2 = recursivePower b exp
     sumOfDigits result2
 ```
-3. Хвостовая рекурсия + pattern maatching
+2. Хвостовая рекурсия + pattern maatching
 ```
   let solution16_3 b exp =
     let tailRecursivePower b exp =
@@ -108,7 +87,7 @@ let solution16_2 b exp =
     let result = tailRecursivePower b exp
     sumOfDigits result
 ```
-4. Sequence + Seq.map
+3. Sequence + Seq.map
 ```
 let solution16_4 exp =
     let sumOfDigitsOfPowerOfTwo exp =
@@ -119,7 +98,7 @@ let solution16_4 exp =
     
     sumOfDigitsOfPowerOfTwo exp
 ```
-5. Решение на языке C++
+4. Решение на языке C++
 ```
 #include <stdio.h>
 
