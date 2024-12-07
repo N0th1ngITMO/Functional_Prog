@@ -2,7 +2,6 @@ module task15
 
 open System.Collections.Generic
 
-//recurtion + pattern matching
 let solution15 x y =
     let rec latticePaths x y memo =
         match x, y with
