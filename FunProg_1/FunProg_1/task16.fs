@@ -3,7 +3,6 @@ module task16
 open System
 open System.Numerics
 
-//recurtion + pattern matching
 let solution16_2 b exp =
     let rec recursivePower b exp =
         match exp with
@@ -24,7 +23,6 @@ let solution16_2 b exp =
     let result2 = recursivePower b exp
     sumOfDigits result2
 
-//tail recurtion + pattern matching
 let solution16_3 b exp =
     let tailRecursivePower b exp =
         let rec loop acc b exp =
@@ -46,7 +44,6 @@ let solution16_3 b exp =
     let result = tailRecursivePower b exp
     sumOfDigits result
 
-//sequence
 let solution16_4 exp =
     let sumOfDigitsOfPowerOfTwo exp =
         let bigNumber = (pown (bigint 2) exp).ToString()
